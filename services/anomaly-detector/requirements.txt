@@ -1,0 +1,7 @@
+# RabbitMQ client
+pika==1.3.2
+
+# For future ML/data analysis
+# scikit-learn
+# pandas
+# numpy

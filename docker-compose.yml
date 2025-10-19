@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: sentinel-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=sentinel
+      - POSTGRES_PASSWORD=supersecretpassword
+      - POSTGRES_DB=sentinel_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sentinel-net
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    container_name: sentinel-rabbitmq
+    ports:
+      - "5672:5672"  # AMQP
+      - "15672:15672" # Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=sentinel
+      - RABBITMQ_DEFAULT_PASS=supersecretpassword
+    networks:
+      - sentinel-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: sentinel-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sentinel-net
+
+volumes:
+  postgres_data:
+
+networks:
+  sentinel-net:
+    driver: bridge
